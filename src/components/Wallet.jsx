@@ -40,8 +40,8 @@ function Wallet() {
             </div>
 
             <div className="flex flex-col gap-6">
-                <SolanaWallet mnemonic={mnemonic} />
-                <EthWallet mnemonic={mnemonic} />
+                <SolanaWallet />
+                <EthWallet />
             </div>
         </div>
     );

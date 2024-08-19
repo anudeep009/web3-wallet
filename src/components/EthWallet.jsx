@@ -1,10 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { mnemonicToSeed } from 'bip39';
-import { Wallet, HDNodeWallet } from 'ethers';
+import { Wallet, HDNodeWallet, ethers } from 'ethers';
+import { WalletContext } from '../context/WalletContext';
 
-export const EthWallet = ({ mnemonic }) => {
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const [wallets, setWallets] = useState([]);
+
+export const EthWallet = () => {
+    const { mnemonic, ethWallets, addEthWallet } = useContext(WalletContext);
+    const [currentIndex, setCurrentIndex] = useState(ethWallets.length);
+
+    const fetchEthBalance = async (address) => {
+        try {
+            const provider = new ethers.JsonRpcProvider('https://mainnet.infura.io/v3/6bd848e7272f4152a15b3af991369616');
+            const balance = await provider.getBalance(address);
+            return ethers.utils.formatEther(balance);
+        } catch (error) {
+            console.error('Error fetching Ethereum balance:', error.message);
+            return '0'; 
+        }
+    };
 
     const handleAddWallet = async () => {
         try {
@@ -14,7 +27,10 @@ export const EthWallet = ({ mnemonic }) => {
             const childNode = hdNode.derivePath(derivationPath);
             const wallet = new Wallet(childNode.privateKey);
 
-            setWallets([...wallets, { address: wallet.address, privateKey: wallet.privateKey }]);
+            const balance = await fetchEthBalance(wallet.address);
+
+            const newWallet = { address: wallet.address, privateKey: wallet.privateKey, balance };
+            addEthWallet(newWallet); 
             setCurrentIndex(currentIndex + 1);
         } catch (error) {
             console.error('Error deriving Ethereum wallet:', error.message);
@@ -29,11 +45,12 @@ export const EthWallet = ({ mnemonic }) => {
             >
                 Add ETH Wallet
             </button>
-            {wallets.map((w, index) => (
+            {ethWallets.map((w, index) => (
                 <div key={index} className="mt-4 p-4 border rounded bg-white dark:bg-gray-700 overflow-auto max-w-full">
                     <h2 className="text-lg font-bold text-purple-600 dark:text-purple-400">Ethereum Wallet {index + 1}</h2>
                     <p className="text-gray-800 dark:text-gray-200"><strong>Address:</strong> <span className="break-all">{w.address}</span></p>
                     <p className="text-gray-800 dark:text-gray-200"><strong>Private Key:</strong> <span className="break-all">{w.privateKey}</span></p>
+                    <p className="text-gray-800 dark:text-gray-200"><strong>Balance:</strong> {w.balance} ETH</p>
                 </div>
             ))}
         </div>

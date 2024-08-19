@@ -1,13 +1,19 @@
-import React, { useState } from 'react';
-import { Keypair } from '@solana/web3.js';
-import { mnemonicToSeedSync } from 'bip39'; 
-import { derivePath } from 'ed25519-hd-key'; 
+import React, { useState, useEffect } from 'react';
+import { Keypair, Connection, PublicKey } from '@solana/web3.js';
+import { mnemonicToSeedSync } from 'bip39';
+import { derivePath } from 'ed25519-hd-key';
 
 export const SolanaWallet = ({ mnemonic }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [wallets, setWallets] = useState([]);
 
-    const handleAddWallet = () => {
+    const fetchSolBalance = async (publicKey) => {
+        const connection = new Connection('https://solana-mainnet.g.alchemy.com/v2/t9XjJfRs6tGhrSCQLIG7qIZ4bcOeoMOn', 'confirmed'); 
+        const balance = await connection.getBalance(new PublicKey(publicKey));
+        return balance / 1e9;
+    };
+
+    const handleAddWallet = async () => {
         try {
             const seed = mnemonicToSeedSync(mnemonic);
             const path = `m/44'/501'/${currentIndex}'/0'`;
@@ -16,7 +22,9 @@ export const SolanaWallet = ({ mnemonic }) => {
             const newPublicKey = keypair.publicKey.toBase58();
             const newPrivateKey = Buffer.from(keypair.secretKey).toString('hex');
 
-            setWallets([...wallets, { publicKey: newPublicKey, privateKey: newPrivateKey }]);
+            const balance = await fetchSolBalance(newPublicKey);
+
+            setWallets([...wallets, { publicKey: newPublicKey, privateKey: newPrivateKey, balance }]);
             setCurrentIndex(currentIndex + 1);
         } catch (error) {
             console.error('Error deriving Solana wallet:', error.message);
@@ -36,6 +44,7 @@ export const SolanaWallet = ({ mnemonic }) => {
                     <h2 className="text-lg font-bold text-green-600 dark:text-green-400">Solana Wallet {index + 1}</h2>
                     <p className="text-gray-800 dark:text-gray-200"><strong>Public Key:</strong> <span className="break-all">{w.publicKey}</span></p>
                     <p className="text-gray-800 dark:text-gray-200"><strong>Private Key:</strong> <span className="break-all">{w.privateKey}</span></p>
+                    <p className="text-gray-800 dark:text-gray-200"><strong>Balance:</strong> {w.balance} SOL</p>
                 </div>
             ))}
         </div>
