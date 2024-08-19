@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Keypair } from '@solana/web3.js';
-import { mnemonicToSeedSync } from 'bip39'; // Synchronous version for simplicity
-import { derivePath } from 'ed25519-hd-key'; // For deriving a unique path
+import { mnemonicToSeedSync } from 'bip39'; 
+import { derivePath } from 'ed25519-hd-key'; 
 
 export const SolanaWallet = ({ mnemonic }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
