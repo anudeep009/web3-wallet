@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Keypair, Connection, PublicKey } from '@solana/web3.js';
 import { mnemonicToSeedSync } from 'bip39';
 import { derivePath } from 'ed25519-hd-key';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 export const SolanaWallet = ({ mnemonic }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [wallets, setWallets] = useState([]);
+    const [showPrivateKey, setShowPrivateKey] = useState(false);
 
     const fetchSolBalance = async (publicKey) => {
         const connection = new Connection('https://solana-mainnet.g.alchemy.com/v2/t9XjJfRs6tGhrSCQLIG7qIZ4bcOeoMOn', 'confirmed'); 
@@ -31,6 +33,10 @@ export const SolanaWallet = ({ mnemonic }) => {
         }
     };
 
+    const handleTogglePrivateKey = () => {
+        setShowPrivateKey(!showPrivateKey);
+    };
+
     return (
         <div className="p-4">
             <button
@@ -43,7 +49,17 @@ export const SolanaWallet = ({ mnemonic }) => {
                 <div key={index} className="mt-4 p-4 border rounded bg-white dark:bg-gray-700 overflow-auto max-w-full">
                     <h2 className="text-lg font-bold text-green-600 dark:text-green-400">Solana Wallet {index + 1}</h2>
                     <p className="text-gray-800 dark:text-gray-200"><strong>Public Key:</strong> <span className="break-all">{w.publicKey}</span></p>
-                    <p className="text-gray-800 dark:text-gray-200"><strong>Private Key:</strong> <span className="break-all">{w.privateKey}</span></p>
+                    <p className="text-gray-800 dark:text-gray-200"><strong>Private Key:</strong> 
+                        <span className="break-all">
+                            {showPrivateKey ? w.privateKey : '••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••'}
+                        </span>
+                        <button 
+                            onClick={handleTogglePrivateKey}
+                            className="ml-2 text-blue-500"
+                        >
+                            {showPrivateKey ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+                        </button>
+                    </p>
                     <p className="text-gray-800 dark:text-gray-200"><strong>Balance:</strong> {w.balance} SOL</p>
                 </div>
             ))}

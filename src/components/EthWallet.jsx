@@ -2,11 +2,12 @@ import React, { useState, useContext } from 'react';
 import { mnemonicToSeed } from 'bip39';
 import { Wallet, HDNodeWallet, ethers } from 'ethers';
 import { WalletContext } from '../context/WalletContext';
-
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 export const EthWallet = () => {
     const { mnemonic, ethWallets, addEthWallet } = useContext(WalletContext);
     const [currentIndex, setCurrentIndex] = useState(ethWallets.length);
+    const [showPrivateKey, setShowPrivateKey] = useState(false);
 
     const fetchEthBalance = async (address) => {
         try {
@@ -37,6 +38,10 @@ export const EthWallet = () => {
         }
     };
 
+    const handleTogglePrivateKey = () => {
+        setShowPrivateKey(!showPrivateKey);
+    };
+
     return (
         <div className="p-4">
             <button
@@ -49,7 +54,17 @@ export const EthWallet = () => {
                 <div key={index} className="mt-4 p-4 border rounded bg-white dark:bg-gray-700 overflow-auto max-w-full">
                     <h2 className="text-lg font-bold text-purple-600 dark:text-purple-400">Ethereum Wallet {index + 1}</h2>
                     <p className="text-gray-800 dark:text-gray-200"><strong>Address:</strong> <span className="break-all">{w.address}</span></p>
-                    <p className="text-gray-800 dark:text-gray-200"><strong>Private Key:</strong> <span className="break-all">{w.privateKey}</span></p>
+                    <p className="text-gray-800 dark:text-gray-200"><strong>Private Key:</strong> 
+                        <span className="break-all">
+                            {showPrivateKey ? w.privateKey : '••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••'}
+                        </span>
+                        <button 
+                            onClick={handleTogglePrivateKey}
+                            className="ml-2 text-blue-500"
+                        >
+                            {showPrivateKey ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+                        </button>
+                    </p>
                     <p className="text-gray-800 dark:text-gray-200"><strong>Balance:</strong> {w.balance} ETH</p>
                 </div>
             ))}
