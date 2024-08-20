@@ -4,10 +4,10 @@ import { Wallet, HDNodeWallet, ethers } from 'ethers';
 import { WalletContext } from '../context/WalletContext';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
-export const EthWallet = () => {
-    const { mnemonic, ethWallets, addEthWallet } = useContext(WalletContext);
+export const EthWallet = ({ mnemonic }) => {
+    const { ethWallets, addEthWallet } = useContext(WalletContext);
     const [currentIndex, setCurrentIndex] = useState(ethWallets.length);
-    const [showPrivateKey, setShowPrivateKey] = useState(false);
+    const [showPrivateKeys, setShowPrivateKeys] = useState(Array(ethWallets.length).fill(false));
 
     const fetchEthBalance = async (address) => {
         try {
@@ -16,7 +16,7 @@ export const EthWallet = () => {
             return ethers.utils.formatEther(balance);
         } catch (error) {
             console.error('Error fetching Ethereum balance:', error.message);
-            return '0'; 
+            return '0';
         }
     };
 
@@ -31,15 +31,18 @@ export const EthWallet = () => {
             const balance = await fetchEthBalance(wallet.address);
 
             const newWallet = { address: wallet.address, privateKey: wallet.privateKey, balance };
-            addEthWallet(newWallet); 
+            addEthWallet(newWallet);
             setCurrentIndex(currentIndex + 1);
+            setShowPrivateKeys([...showPrivateKeys, false]);
         } catch (error) {
             console.error('Error deriving Ethereum wallet:', error.message);
         }
     };
 
-    const handleTogglePrivateKey = () => {
-        setShowPrivateKey(!showPrivateKey);
+    const handleTogglePrivateKey = (index) => {
+        const updatedShowPrivateKeys = [...showPrivateKeys];
+        updatedShowPrivateKeys[index] = !updatedShowPrivateKeys[index];
+        setShowPrivateKeys(updatedShowPrivateKeys);
     };
 
     return (
@@ -54,15 +57,15 @@ export const EthWallet = () => {
                 <div key={index} className="mt-4 p-4 border rounded bg-white dark:bg-gray-700 overflow-auto max-w-full">
                     <h2 className="text-lg font-bold text-purple-600 dark:text-purple-400">Ethereum Wallet {index + 1}</h2>
                     <p className="text-gray-800 dark:text-gray-200"><strong>Address:</strong> <span className="break-all">{w.address}</span></p>
-                    <p className="text-gray-800 dark:text-gray-200"><strong>Private Key:</strong> 
+                    <p className="text-gray-800 dark:text-gray-200"><strong>Private Key:</strong>
                         <span className="break-all">
-                            {showPrivateKey ? w.privateKey : '••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••'}
+                            {showPrivateKeys[index] ? w.privateKey : '••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••'}
                         </span>
-                        <button 
-                            onClick={handleTogglePrivateKey}
+                        <button
+                            onClick={() => handleTogglePrivateKey(index)}
                             className="ml-2 text-blue-500"
                         >
-                            {showPrivateKey ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+                            {showPrivateKeys[index] ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
                         </button>
                     </p>
                     <p className="text-gray-800 dark:text-gray-200"><strong>Balance:</strong> {w.balance} ETH</p>
