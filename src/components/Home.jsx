@@ -23,7 +23,7 @@ export default function Home() {
       </section>
 
       {/* Features Section */}
-      <section className={`py-16 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
+      <section className={`py-16 ${isDarkMode ? 'bg-gray-800' : 'bg-white text-black'}`}>
         <div className="container mx-auto px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">Why Choose CryptoVault?</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -71,7 +71,7 @@ export default function Home() {
               >
                 <feature.icon className="h-12 w-12 text-blue-500 mb-4" />
                 <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-                <p className="text-gray-200 dark:text-gray-300">{feature.description}</p>
+                <p className="text-gray-600 dark:text-gray-600">{feature.description}</p>
               </div>
             ))}
           </div>

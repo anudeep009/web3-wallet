@@ -1,103 +1,59 @@
-import React, { useState, useContext } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ThemeContext } from '../context/ThemeContext';
+import React from 'react';
+import { motion } from 'framer-motion';
+import {
+  ConnectionProvider,
+  WalletProvider,
+} from '@solana/wallet-adapter-react';
+import {
+  WalletModalProvider,
+  WalletDisconnectButton,
+  WalletMultiButton,
+} from '@solana/wallet-adapter-react-ui';
+import { PhantomWalletAdapter } from '@solana/wallet-adapter-wallets';
+import '@solana/wallet-adapter-react-ui/styles.css';
 
 export default function Faucet() {
-  const { isDarkMode } = useContext(ThemeContext);
-  const [isWalletConnected, setIsWalletConnected] = useState(false);
-  const [address, setAddress] = useState('');
-
-  const handleConnectWallet = () => {
-    setIsWalletConnected(true);
-    // Call toast or any other notification system
-  };
-
-  const handleDisconnectWallet = () => {
-    setIsWalletConnected(false);
-    setAddress('');
-    // Call toast or any other notification system
-  };
-
-  const handleRequestAirdrop = () => {
-    if (!address) {
-      // Call toast or any other notification system
-      return;
-    }
-    // Call toast or any other notification system
-  };
+  const wallets = [new PhantomWalletAdapter()];
 
   return (
-    <div className={`mt-20 w-full max-w-md mx-auto p-4 rounded-lg shadow-md ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-black'}`}>
-      <div className="mb-4">
-        <motion.h1
-          className="text-2xl font-bold"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          CryptoVault Faucet
-        </motion.h1>
-        <motion.p
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-          Request test tokens for the CryptoVault network
-        </motion.p>
-      </div>
-      <div className="space-y-4">
-        <AnimatePresence>
-          {!isWalletConnected ? (
-            <motion.button
-              key="connect"
-              onClick={handleConnectWallet}
-              className="w-full py-2 px-4 rounded-lg bg-blue-500 text-white hover:bg-blue-600"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              transition={{ duration: 0.3 }}
-            >
-              Connect Wallet
-            </motion.button>
-          ) : (
-            <motion.button
-              key="disconnect"
-              onClick={handleDisconnectWallet}
-              className="w-full py-2 px-4 rounded-lg border border-blue-500 text-blue-500 hover:bg-blue-100"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              transition={{ duration: 0.3 }}
-            >
-              Disconnect Wallet
-            </motion.button>
-          )}
-        </AnimatePresence>
-        <motion.input
-          type="text"
-          placeholder="Enter your wallet address"
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
-          disabled={isWalletConnected}
-          className={`w-full p-2 border rounded-lg ${isDarkMode ? 'bg-gray-700 text-white border-gray-600' : 'bg-gray-200 text-black border-gray-300'}`}
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.4 }}
-        />
-      </div>
-      <div className="mt-4">
-        {!isWalletConnected && (
-          <motion.button
-            onClick={handleRequestAirdrop}
-            className="w-full py-2 px-4 rounded-lg bg-green-500 text-white hover:bg-green-600"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.3 }}
+    <ConnectionProvider endpoint="https://solana-devnet.g.alchemy.com/v2/SYT-X7hNux9uiFFWNfTB1EWk67fxmJTD">
+      <WalletProvider wallets={wallets} autoConnect>
+        <WalletModalProvider>
+          {/* Container with animation */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="relative flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-8"
           >
-            Request Airdrop
-          </motion.button>
-        )}
-      </div>
-    </div>
+            {/* Wallet Buttons Group - Positioned on the top right corner */}
+            <div className="absolute top-4 right-4 flex flex-col items-end space-y-2">
+              <WalletMultiButton className="bg-blue-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-600 transition-all" />
+              {/* <WalletDisconnectButton className="bg-red-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-red-600 transition-all" /> */}
+            </div>
+
+            {/* Main Card Container */}
+            <div className="w-full max-w-md p-6 bg-white rounded-xl shadow-xl border border-gray-200 flex flex-col items-center space-y-6">
+              {/* Title */}
+              <h1 className="text-2xl font-bold text-gray-800">
+                Solana Faucet
+              </h1>
+
+              {/* Input Field for Amount */}
+              <input
+                type="number"
+                placeholder="Enter amount"
+                className="w-full px-4 py-2 text-gray-700 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+
+              {/* Request Airdrop Button */}
+              <button className="w-full px-4 py-2 bg-green-500 text-white font-medium rounded-md shadow-lg hover:bg-green-600 transition-all">
+                Request Airdrop
+              </button>
+            </div>
+          </motion.div>
+        </WalletModalProvider>
+      </WalletProvider>
+    </ConnectionProvider>
   );
 }
