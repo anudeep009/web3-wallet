@@ -1,8 +1,11 @@
-import Header from "./components/Header"
 import Home from "./components/Home"
-import { EthWallet } from "./components/EthWallet"
-import { SolanaWallet } from "./components/SolanaWallet"
+import Header from "./components/Header"
+import Faucet from "./components/Faucet"
 import Wallet from "./components/Wallet"
+import Settings from "./components/Settings"
+import { EthWallet } from "./components/EthWallet"
+import Transactions from "./components/Transactions"
+import { SolanaWallet } from "./components/SolanaWallet"
 
 
 export {
@@ -10,5 +13,8 @@ export {
     Home,
     EthWallet,
     SolanaWallet,
-    Wallet
+    Wallet,
+    Faucet,
+    Transactions,
+    Settings
 }
