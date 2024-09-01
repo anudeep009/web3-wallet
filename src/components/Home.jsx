@@ -6,6 +6,7 @@ import { ThemeContext } from '../context/ThemeContext';
 export default function Home() {
   const [selectedPlan, setSelectedPlan] = useState(null);
   const { isDarkMode } = useContext(ThemeContext);
+  const date = new Date();
 
   return (
     <div className={`flex flex-col min-h-screen ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-50 text-white'}`}>
@@ -71,7 +72,7 @@ export default function Home() {
               >
                 <feature.icon className="h-12 w-12 text-blue-500 mb-4" />
                 <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-                <p className="text-gray-600 dark:text-gray-600">{feature.description}</p>
+                <p className="text-gray-400 dark:text-white">{feature.description}</p>
               </div>
             ))}
           </div>
@@ -96,7 +97,7 @@ export default function Home() {
       {/* Footer */}
       <footer className={`py-8 text-center ${isDarkMode ? 'bg-gray-900' : 'bg-gray-800'} text-white`}>
         <div className="container mx-auto">
-          <p>&copy; 2024 CryptoVault. All rights reserved.</p>
+          <p>&copy; {date.getFullYear()} CryptoVault. All rights reserved.</p>
         </div>
       </footer>
     </div>
