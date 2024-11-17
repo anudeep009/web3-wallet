@@ -1,11 +1,10 @@
 import { useState, useContext } from 'react';
 import { CheckCircle, Shield, BarChart3, Zap, Wallet, Globe } from 'lucide-react';
-import { ThemeContext } from '../context/ThemeContext';
 
 
 export default function Home() {
   const [selectedPlan, setSelectedPlan] = useState(null);
-  const { isDarkMode } = useContext(ThemeContext);
+  const { isDarkMode } = true;
   const date = new Date();
 
   return (

@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { mnemonicToSeed } from 'bip39';
 import { Wallet, HDNodeWallet, ethers } from 'ethers';
-import { WalletContext } from '../context/WalletContext';
+import { WalletContext } from '../../context/WalletContext';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 

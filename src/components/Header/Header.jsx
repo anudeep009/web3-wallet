@@ -1,14 +1,10 @@
 import { useState, useContext } from 'react';
 import { Wallet as WalletIcon, Menu, X } from 'lucide-react';
-import { ThemeContext } from '../context/ThemeContext';
-import { FaSun, FaMoon } from 'react-icons/fa';
 import { Link, NavLink } from 'react-router-dom';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { isDarkMode, toggleTheme } = useContext(ThemeContext);
-
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  const isDarkMode = true;
 
   return (
     <header className={`shadow-sm ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-black'}`}>
@@ -22,7 +18,7 @@ export default function Header() {
             </Link>
             {/* Desktop Navigation */}
             <nav className="hidden md:flex space-x-8 ml-6">
-              {['Wallet', 'Faucet', 'Transactions', 'Settings'].map((item) => (
+              {['Wallet', 'Faucet','Swap'].map((item) => (
                 <NavLink
                   key={item}
                   to={`/${item.toLowerCase()}`}
@@ -38,21 +34,10 @@ export default function Header() {
             </nav>
           </div>
 
-          {/* Theme Toggle Button */}
-          <div className="hidden md:flex items-center">
-            <button
-              onClick={toggleTheme}
-              className="ml-4 p-2 rounded-full border border-gray-300 bg-gray-200 dark:bg-gray-700 dark:border-gray-600 text-lg cursor-pointer"
-              aria-label="Toggle Theme"
-            >
-              {isDarkMode ? <FaSun className="text-yellow-400" /> : <FaMoon className="text-gray-500" />}
-            </button>
-          </div>
-
           {/* Mobile Menu Button */}
           <div className="md:hidden">
             <button
-              onClick={toggleMenu}
+              
               className="p-2 rounded-md text-muted-foreground hover:text-primary focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary"
               aria-label="Toggle Menu"
             >
@@ -66,7 +51,7 @@ export default function Header() {
       {isMenuOpen && (
         <div className={`md:hidden ${isDarkMode ? 'bg-gray-900' : 'bg-white'} shadow-lg`}>
           <nav className="px-2 pt-2 pb-3 space-y-1">
-            {['Dashboard', 'Transactions', 'Assets', 'Settings'].map((item) => (
+            {['Wallet', 'Faucet','Swap'].map((item) => (
               <NavLink
                 key={item}
                 to={`/${item.toLowerCase()}`}
@@ -80,17 +65,6 @@ export default function Header() {
               </NavLink>
             ))}
           </nav>
-
-          {/* Connect Wallet Button and Theme Toggle for Mobile */}
-          <div className="pt-4 pb-3 border-t border-muted px-2 space-y-3">
-            <button
-              onClick={toggleTheme}
-              className="p-2 rounded-full ml-24 border border-gray-300 bg-gray-200 dark:bg-gray-700 dark:border-gray-600 text-lg"
-              aria-label="Toggle Theme"
-            >
-              {isDarkMode ? <FaSun className="text-yellow-400" /> : <FaMoon className="text-gray-500" />}
-            </button>
-          </div>
         </div>
       )}
     </header>

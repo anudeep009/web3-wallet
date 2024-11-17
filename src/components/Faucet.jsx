@@ -15,13 +15,13 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import { useConnection } from '@solana/wallet-adapter-react';
 import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 import toast, { Toaster } from 'react-hot-toast';
-import { ThemeContext } from '../context/ThemeContext';
+
 
 function RequestAirdrop() {
   const wallet = useWallet();
   const { connection } = useConnection();
   const [loading, setLoading] = useState(false);
-  const { isDarkMode } = useContext(ThemeContext);
+  const  [isDarkMode, setIsDarkMode]  = useState(true);
 
   const notify = (amount) =>
     toast.success(`Airdropped ${amount} SOL to ${wallet.publicKey.toBase58()}`);
@@ -78,7 +78,7 @@ function RequestAirdrop() {
 
 export default function Faucet() {
   const wallets = [new PhantomWalletAdapter()];
-  const { isDarkMode } = useContext(ThemeContext);
+  const { isDarkMode } = true;
 
   return (
     <ConnectionProvider endpoint="https://solana-devnet.g.alchemy.com/v2/SYT-X7hNux9uiFFWNfTB1EWk67fxmJTD">

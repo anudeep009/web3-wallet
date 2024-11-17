@@ -2,12 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import { WalletProvider } from './context/WalletContext';
-import { ThemeProvider } from './context/ThemeContext';
 import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom';
-import './styles/light-theme.css';
 import './styles/dark-theme.css';
-import { Wallet, Home, Faucet, Transactions, Settings } from './exports';
+import { Wallet, Home, Faucet, } from './exports';
 import Layout from './Layout.jsx';
+import Swap from './components/swap/Swap.jsx';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -17,17 +16,14 @@ const router = createBrowserRouter(
       <Route path="" element={<Home />} />
       <Route path="wallet" element={<Wallet />} />
       <Route path="faucet" element={<Faucet />} />
-      <Route path="transactions" element={<Transactions />} />
-      <Route path="settings" element={<Settings />} />
+      <Route path="swap" element={<Swap />} />
     </Route>
   )
 );
 
 root.render(
-  <ThemeProvider>
     <WalletProvider>
       <RouterProvider router={router}>
       </RouterProvider>
     </WalletProvider>
-  </ThemeProvider>
 );

@@ -1,19 +1,18 @@
 import React, { useContext } from 'react';
 import { WalletContext } from '../context/WalletContext';
-import { SolanaWallet } from './SolanaWallet';
-import { EthWallet } from './EthWallet';
+import { SolanaWallet } from './solana/SolanaWallet';
+import { EthWallet } from './etherium/EthWallet';
 import { generateMnemonic } from 'bip39';
 import { Buffer } from 'buffer';
 import { FaCopy } from 'react-icons/fa';
 import toast, { Toaster } from 'react-hot-toast';
 import { motion } from 'framer-motion';
-import { ThemeContext } from '../context/ThemeContext';
 
 window.Buffer = window.Buffer || Buffer;
 
 function Wallet() {
   const { mnemonic, setMnemonic } = useContext(WalletContext);
-  const { isDarkMode } = useContext(ThemeContext);
+  const { isDarkMode } = true;
 
   const notify = () => toast('Mnemonic copied to clipboard!');
 
