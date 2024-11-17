@@ -59,8 +59,8 @@ function RequestAirdrop() {
         min={1}
         step={0.1}
         placeholder="Enter amount"
-        className={`w-full px-4 py-2 text-gray-700 border rounded-md shadow-sm focus:outline-none focus:ring-2 ${
-          isDarkMode ? 'bg-gray-700 border-gray-600 focus:ring-blue-500' : 'bg-gray-50 border-gray-300 focus:ring-blue-500'
+        className={`w-full px-4 py-2 text-gray-700 border rounded-md shadow-sm focus:outline-none focus:ring-2 
+          bg-gray-700 border-gray-600 focus:ring-blue-500' 
         }`}
       />
       <button
@@ -88,9 +88,9 @@ export default function Faucet() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
-            className={`relative flex flex-col items-center justify-center min-h-screen p-8 ${
-              isDarkMode ? 'bg-gray-900' : 'bg-gradient-to-br from-gray-50 to-gray-100'
-            }`}
+            className="relative flex flex-col items-center justify-center min-h-screen p-8 
+             bg-gray-900' bg-gradient-to-br from-gray-50 to-gray-100
+            "
           >
             <div className="absolute top-4 right-4 flex flex-col items-end space-y-2">
               <WalletMultiButton className="bg-blue-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-600 transition-all" />
